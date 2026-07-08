@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quartier-Foot-Live - Douala</title>
+<style>
+body{font-family:Arial;background:#f4f4f4;padding:20px}
+.card{background:white;padding:15px;margin-bottom:15px;border-radius:8px}
+table{width:100%;border-collapse:collapse} th,td{padding:8px;border:1px solid #ddd;text-align:center}
+.top{background:#008000;color:white;padding:10px;border-radius:8px;text-align:center}
+</style>
+</head>
+<body>
+<div class="top"><h1>Quartier-Foot-Live Douala</h1><p>Calendrier, Scores en direct et Classement</p></div>
+
+<div class="card">
+<h3>Ajouter un match au calendrier</h3>
+<form action="/add" method="POST">
+<input name="equipe1" placeholder="Domicile (ex: Brasserie)" required>
+<input name="equipe2" placeholder="Exterieur (ex: New-Bell)" required>
+<input type="date" name="date" required>
+<input type="time" name="heure" required>
+<input name="terrain" placeholder="Terrain" required>
+<input name="score1" placeholder="Score Eq1" style="width:80px">
+<input name="score2" placeholder="Score Eq2" style="width:80px">
+<button type="submit">+ Ajouter au calendrier</button>
+</form>
+</div>
+
+<div class="card">
+<h3>Calendrier & Scores en Direct</h3>
+{% for m in matches %}
+<p><b>{{ m.date }} {{ m.heure }} - {{ m.terrain }}</b> : {{ m.equipe1 }} vs {{ m.equipe2 }}
+{% if m.score1!= '' %} - <b>{{ m.score1 }} - {{ m.score2 }}</b> {% endif %}
+<form action="/update/{{ m.id }}" method="POST" style="display:inline">
+<input name="score1" value="{{ m.score1 }}" style="width:30px"> - <input name="score2" value="{{ m.score2 }}" style="width:30px">
+<button>Mettre a jour score live</button>
+</form>
+</p>
+{% endfor %}
+</div>
+
+<div class="card">
+<h3>Classement du Quartier</h3>
+<table>
+<tr><th>#</th><th>Equipe</th><th>Pts</th><th>J</th><th>G</th><th>N</th><th>P</th><th>BP:BC</th></tr>
+{% for eq in classement %}
+<tr><td>{{ loop.index }}</td><td>{{ eq.nom }}</td><td><b>{{ eq.pts }}</b></td><td>{{ eq.joues }}</td><td>{{ eq.gagnes }}</td><td>{{ eq.nuls }}</td><td>{{ eq.perdus }}</td><td>{{ eq.buts_pour }}:{{ eq.buts_contre }}</td></tr>
+{% endfor %}
+</table>
+</div>
+</body>
+</html>
