@@ -1,0 +1,57 @@
+/* Fond de toute la page */
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Le bandeau du haut vert */
+.top {
+    background: linear-gradient(135deg, #008000, #00b300);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Titre QUARTIER FOOT LIVE */
+.top h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* Les cartes blanches (matchs) */
+.card {
+    background: white;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Les boutons verts */
+button {
+    background: #008000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+/* Quand on passe la souris sur le bouton */
+button:hover {
+    background: #006600;
+}
+
+/* Les cases pour écrire */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
