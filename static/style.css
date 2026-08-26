@@ -55,3 +55,21 @@ input, select {
     border: 1px solid #ccc;
     border-radius: 8px;
 }
+}
+.card table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.card th, .card td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+.card th {
+  background-color: #2e7d32;
+  color: white;
+}
+.card tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

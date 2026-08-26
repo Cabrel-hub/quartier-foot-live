@@ -1,47 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>⚽ Quartier-Foot-Live</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foot Quartier</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body{font-family:Arial; padding:10px; background:#f5f5f5}
+        .card{background:white; padding:15px; border-radius:10px; margin-bottom:20px; box-shadow:0 2px 5px #0001}
+        input,button{padding:8px; margin:3px; border-radius:5px; border:1px solid #ccc}
+        button{background:#0a7a42; color:white; border:none; cursor:pointer; width:100%}
+        table{width:100%; border-collapse:collapse}
+        th{background:#0a7a42; color:white; padding:8px}
+        td{padding:8px; border-bottom:1px solid #ddd; text-align:center}
+    </style>
 </head>
 <body>
-<div class="top"><h1>⚽ Quartier-Football-Live</h1><p>Calendrier, Scores en direct et Classement</p></div>
+    <header style="background:#0a7a42; color:white; padding:15px; text-align:center; border-radius:10px; margin-bottom:20px;">
+        <h1 style="margin:0;">⚽ Championnat du Quartier - Douala</h1>
+        <p style="margin:5px 0 0 0; font-size:14px;">Live scores & classement</p>
+    </header>
+    <div class="card">
+        <h3>Ajouter un match</h3>
+        <form action="/add" method="POST">
+            <input name="equipe1" placeholder="Equipe 1 ex: Deido" required>
+            <input name="equipe2" placeholder="Equipe 2 ex: Akwa" required>
+            <input name="date" type="date" value="2026-08-26" required>
+            <input name="heure" type="time" value="16:00" required>
+            <input name="score1" type="number" placeholder="0" required style="width:60px">
+            <input name="score2" type="number" placeholder="0" required style="width:60px">
+            <button type="submit">Ajouter</button>
+        </form>
+    </div>
 
-<div class="card">
-<h3>Ajouter un match au calendrier</h3>
-<form action="/add" method="POST">
-<input name="equipe1" placeholder="Domicile (ex: Brasserie)" required>
-<input name="equipe2" placeholder="Exterieur (ex: New-Bell)" required>
-<input type="date" name="date" required>
-<input type="time" name="heure" required>
-<input name="terrain" placeholder="Terrain" required>
-<input name="score1" placeholder="Score Eq1" style="width:80px">
-<input name="score2" placeholder="Score Eq2" style="width:80px">
-<button type="submit">+ Ajouter au calendrier</button>
-</form>
-</div>
+    <div class="card">
+        <h3>Calendrier & Scores en Direct</h3>
+        {% for m in matches %}
+        <div style="border-bottom:1px solid #eee; padding:10px 0;">
+            <b>{{ m['date'] }} à {{ m['heure'] }} - {{ m['equipe1'] }} vs {{ m['equipe2'] }}
+            <form action="/update/{{ m['id'] }}" method="POST" style="display:flex; gap:5px; margin-top:5px;">
+                <input name="score1" type="number" value="{{ m['score1'] }}" style="width:60px">
+                <span>-</span>
+                <input name="score2" type="number" value="{{ m['score2'] }}" style="width:60px">
+                <button type="submit" style="width:auto;">Mettre a jour score live</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
 
-<div class="card">
-<h3>Calendrier & Scores en Direct</h3>
-{% for m in matches %}
-<p><b>{{ m.date }} {{ m.heure }} - {{ m.terrain }}</b> : {{ m.equipe1 }} vs {{ m.equipe2 }}
-{% if m.score1!= '' %} - <b>{{ m.score1 }} - {{ m.score2 }}</b> {% endif %}
-<form action="/update/{{ m.id }}" method="POST" style="display:inline">
-<input name="score1" value="{{ m.score1 }}" style="width:30px"> - <input name="score2" value="{{ m.score2 }}" style="width:30px">
-<button>Mettre a jour score live</button>
-</form>
-</p>
-{% endfor %}
-</div>
-
-<div class="card">
-<h3>Classement du Quartier</h3>
-<table>
-<tr><th>#</th><th>Equipe</th><th>Pts</th><th>J</th><th>G</th><th>N</th><th>P</th><th>BP:BC</th></tr>
-{% for eq in classement %}
-<tr><td>{{ loop.index }}</td><td>{{ eq.nom }}</td><td><b>{{ eq.pts }}</b></td><td>{{ eq.joues }}</td><td>{{ eq.gagnes }}</td><td>{{ eq.nuls }}</td><td>{{ eq.perdus }}</td><td>{{ eq.buts_pour }}:{{ eq.buts_contre }}</td></tr>
-{% endfor %}
-</table>
-</div>
+    <div class="card">
+        <h3>Classement du Quartier</h3>
+        <table>
+            <tr><th>#</th><th>Equipe</th><th>Pts</th><th>J</th><th>G</th><th>N</th><th>P</th><th>BP:BC</th></tr>
+            {% for nom, stats in classement %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td><b>{{ nom }}</b></td>
+                <td><b>{{ stats['Pts'] }}</b></td>
+                <td>{{ stats['J'] }}</td>
+                <td>{{ stats['G'] }}</td>
+                <td>{{ stats['N'] }}</td>
+                <td>{{ stats['P'] }}</td>
+                <td>{{ stats['BP'] }}:{{ stats['BC'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="/reset" onclick="return confirm('Effacer tout le championnat ?')" style="color:red; font-size:12px;">Effacer tout (reset)</a>
+    </div>
 </body>
 </html>
